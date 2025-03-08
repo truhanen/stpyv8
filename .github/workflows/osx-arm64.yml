@@ -3,6 +3,7 @@ name: MacOSX ARM64 build/release workflow
 on:
   push:
   pull_request:
+  workflow_dispatch:
   release:
     types: [published]
     branches: [master]
@@ -127,25 +128,3 @@ jobs:
         if: ${{ github.event_name == 'release' }}
         with:
           files: stpyv8-${{ matrix.os }}-${{ matrix.python-version }}/*.whl
-          token: ${{ secrets.GITHUB_TOKEN }}
-  pypi-publish:
-    name: Upload release to PyPI
-    if: ${{ github.event_name == 'release' }}
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: pypi
-      url: https://pypi.org/p/stpyv8
-    permissions:
-      id-token: write
-    steps:
-      - name: Download wheels
-        uses: actions/download-artifact@v4
-        with:
-          path: stpyv8-macos-dist
-          pattern: stpyv8-macos*
-          merge-multiple: true
-      - name: Publish wheels to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: stpyv8-macos-dist
