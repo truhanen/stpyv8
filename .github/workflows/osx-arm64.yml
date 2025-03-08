@@ -1,12 +1,7 @@
 ---
 name: MacOSX ARM64 build/release workflow
 on:
-  push:
-  pull_request:
   workflow_dispatch:
-  release:
-    types: [published]
-    branches: [master]
 jobs:
   build-v8:
     # If Google V8 is in the workflow cache, don't build it.
@@ -125,6 +120,5 @@ jobs:
           path: stpyv8-${{ matrix.os }}-${{ matrix.python-version }}/*.whl
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: ${{ github.event_name == 'release' }}
         with:
           files: stpyv8-${{ matrix.os }}-${{ matrix.python-version }}/*.whl
